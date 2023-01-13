@@ -21,7 +21,10 @@ mongoose
 
 const app = express();
 
-app.use(cors())
+app.use(cors({ 
+  origin: "https://puffizzybackend.herokuapp.com", 
+  credentials: true 
+ }));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
