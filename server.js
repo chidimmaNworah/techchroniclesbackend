@@ -6,7 +6,12 @@ import productRouter from './routes/productRoutes.js';
 import userRouter from './routes/userRoutes.js';
 import orderRouter from './routes/orderRoutes.js';
 import uploadRouter from './routes/uploadRoutes.js';
+import discountRouter from './routes/discountRoutes.js';
+import nailartRouter from './routes/nailartRoutes.js';
 import cors from 'cors';
+import toolRouter from './routes/toolRoutes.js';
+import comboRouter from './routes/comboRoutes.js';
+import treatmentRouter from './routes/treatmentRoutes.js';
 
 dotenv.config();
 
@@ -28,14 +33,17 @@ app.use(
   })
 );
 
-// app.use((req, res, next) => {
-//   res.setHeader('Access-Control-Allow-Origin', 'https://puffizzyfrontend.vercel.app');
-//   res.header(
-//     'Access-Control-Allow-Headers',
-//     'Origin, X-Requested-With, Content-Type, Accept'
-//   );
-//   next();
-// });
+app.use((req, res, next) => {
+  res.setHeader(
+    'Access-Control-Allow-Origin',
+    'https://nailsrepublicclient.vercel.app'
+  );
+  res.header(
+    'Access-Control-Allow-Headers',
+    'Origin, X-Requested-With, Content-Type, Accept'
+  );
+  next();
+});
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -50,6 +58,11 @@ app.use('/api/upload', uploadRouter);
 app.use('/api/products', productRouter);
 app.use('/api/users', userRouter);
 app.use('/api/orders', orderRouter);
+app.use('/api/discounts', discountRouter);
+app.use('/api/nailarts', nailartRouter);
+app.use('/api/tools', toolRouter);
+app.use('/api/combos', comboRouter);
+app.use('/api/treatments', treatmentRouter);
 
 // const __dirname = path.resolve();
 // app.use(express.static(path.join(__dirname, '/frontend/build')));
