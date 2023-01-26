@@ -8,7 +8,7 @@ import Combo from '../models/comboModel.js';
 const comboRouter = express.Router();
 
 comboRouter.get('/', async (req, res) => {
-  const combos = await Combo.find().sort({ createdAt: -1 });
+  const combos = await Combo.find().sort({ createdAt: 1 });
   res.send(combos);
 });
 
@@ -117,7 +117,7 @@ comboRouter.get('/changepage', async (req, res) => {
   const pageSize = query.pageSize || PAGE_SIZE;
 
   const combos = await Combo.find()
-    .sort({ createdAt: -1 })
+    .sort({ createdAt: 1 })
     .skip(pageSize * (page - 1))
     .limit(pageSize);
   const countCombos = await Combo.countDocuments();

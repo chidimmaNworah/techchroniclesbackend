@@ -8,7 +8,7 @@ import Treatment from '../models/treatmentModel.js';
 const treatmentRouter = express.Router();
 
 treatmentRouter.get('/', async (req, res) => {
-  const treatments = await Treatment.find().sort({ createdAt: -1 });
+  const treatments = await Treatment.find().sort({ createdAt: 1 });
   res.send(treatments);
 });
 
@@ -118,7 +118,7 @@ treatmentRouter.get('/changepage', async (req, res) => {
   const pageSize = query.pageSize || PAGE_SIZE;
 
   const treatments = await Treatment.find()
-    .sort({ createdAt: -1 })
+    .sort({ createdAt: 1 })
     .skip(pageSize * (page - 1))
     .limit(pageSize);
   const countTreatments = await Treatment.countDocuments();
