@@ -8,7 +8,7 @@ import Treatment from '../models/treatmentModel.js';
 const treatmentRouter = express.Router();
 
 treatmentRouter.get('/', async (req, res) => {
-  const treatments = await Treatment.find();
+  const treatments = await Treatment.find().sort({ createdAt: -1 });
   res.send(treatments);
 });
 
@@ -64,7 +64,7 @@ treatmentRouter.delete(
   isAuth,
   isAdmin,
   expressAsyncHandler(async (req, res) => {
-    const treament = await Treatment.findById(req.params.id);
+    const treatment = await Treatment.findById(req.params.id);
     if (treatment) {
       await treatment.remove();
       res.send({ message: 'Treatment Deleted' });
@@ -118,6 +118,7 @@ treatmentRouter.get('/changepage', async (req, res) => {
   const pageSize = query.pageSize || PAGE_SIZE;
 
   const treatments = await Treatment.find()
+    .sort({ createdAt: -1 })
     .skip(pageSize * (page - 1))
     .limit(pageSize);
   const countTreatments = await Treatment.countDocuments();

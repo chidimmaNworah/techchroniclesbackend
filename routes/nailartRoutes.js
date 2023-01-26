@@ -8,7 +8,7 @@ import Nailart from '../models/nailartModel.js';
 const nailartRouter = express.Router();
 
 nailartRouter.get('/', async (req, res) => {
-  const nailarts = await Nailart.find();
+  const nailarts = await Nailart.find().sort({ createdAt: -1 });
   res.send(nailarts);
 });
 
@@ -118,6 +118,7 @@ nailartRouter.get('/changepage', async (req, res) => {
   const pageSize = query.pageSize || PAGE_SIZE;
 
   const nailarts = await Nailart.find()
+    .sort({ createdAt: -1 })
     .skip(pageSize * (page - 1))
     .limit(pageSize);
   const countNailarts = await Nailart.countDocuments();

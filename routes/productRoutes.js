@@ -8,7 +8,7 @@ import Product from '../models/productModel.js';
 const productRouter = express.Router();
 
 productRouter.get('/', async (req, res) => {
-  const products = await Product.find();
+  const products = await Product.find().sort({ createdAt: -1 });
   res.send(products);
 });
 
@@ -131,6 +131,7 @@ productRouter.get('/changepage', async (req, res) => {
   const pageSize = query.pageSize || PAGE_SIZE;
 
   const products = await Product.find()
+    .sort({ createdAt: -1 })
     .skip(pageSize * (page - 1))
     .limit(pageSize);
   const countProducts = await Product.countDocuments();

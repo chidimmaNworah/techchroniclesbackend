@@ -8,7 +8,7 @@ import Discount from '../models/discountModel.js';
 const discountRouter = express.Router();
 
 discountRouter.get('/', async (req, res) => {
-  const discounts = await Discount.find();
+  const discounts = await Discount.find().sort({ createdAt: -1 });
   res.send(discounts);
 });
 
@@ -120,6 +120,7 @@ discountRouter.get('/changepage', async (req, res) => {
   const pageSize = query.pageSize || PAGE_SIZE;
 
   const discounts = await Discount.find()
+    .sort({ createdAt: -1 })
     .skip(pageSize * (page - 1))
     .limit(pageSize);
   const countDiscounts = await Discount.countDocuments();

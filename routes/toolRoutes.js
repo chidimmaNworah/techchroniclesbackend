@@ -8,7 +8,7 @@ import Tools from '../models/toolModel.js';
 const toolRouter = express.Router();
 
 toolRouter.get('/', async (req, res) => {
-  const tools = await Tools.find();
+  const tools = await Tools.find().sort({ createdAt: -1 });
   res.send(tools);
 });
 
@@ -117,6 +117,7 @@ toolRouter.get('/changepage', async (req, res) => {
   const pageSize = query.pageSize || PAGE_SIZE;
 
   const tools = await Tools.find()
+    .sort({ createdAt: -1 })
     .skip(pageSize * (page - 1))
     .limit(pageSize);
   const countTools = await Tools.countDocuments();
