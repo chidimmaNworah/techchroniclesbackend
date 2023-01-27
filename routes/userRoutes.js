@@ -135,10 +135,19 @@ userRouter.post(
 userRouter.post(
   '/signup',
   expressAsyncHandler(async (req, res) => {
+    var confirmedPassword;
+
+    if (req.body.password == req.body.confirmPassword) {
+      confirmedPassword = bcrypt.hashSync(req.body.password);
+      console.log('password match');
+    } else {
+      console.log('passwords do not match');
+    }
     const newUser = new User({
       name: req.body.name,
       email: req.body.email,
-      password: bcrypt.hashSync(req.body.password),
+
+      password: confirmedPassword,
     });
     const user = await newUser.save();
     res.send({

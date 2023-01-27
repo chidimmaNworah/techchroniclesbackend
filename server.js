@@ -26,6 +26,13 @@ mongoose
 
 const app = express();
 
+// app.use(
+//   cors({
+//     origin: 'https://localhost:3000/',
+//     credentials: true,
+//   })
+// );
+
 app.use(
   cors({
     origin: 'https://nailsrepublicclient.vercel.app',
@@ -34,10 +41,7 @@ app.use(
 );
 
 // app.use((req, res, next) => {
-//   res.setHeader(
-//     'Access-Control-Allow-Origin',
-//     'https://nailsrepublicclient.vercel.app'
-//   );
+//   res.setHeader('Access-Control-Allow-Origin', '*');
 //   res.header(
 //     'Access-Control-Allow-Headers',
 //     'Origin, X-Requested-With, Content-Type, Accept'
