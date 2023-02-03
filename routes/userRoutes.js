@@ -1,9 +1,26 @@
 import express from 'express';
 import User from '../models/userModel.js';
 import bcrypt from 'bcryptjs';
-import { generateToken, isAdmin, isAuth } from '../utils.js';
+import jwt from 'jsonwebtoken';
+import {
+  generateEmailTemplate,
+  generateOTP,
+  generateToken,
+  isAdmin,
+  isAuth,
+  mailTransport,
+  passwordResetEmail,
+  passwordResetMail,
+  plainEmailTemplate,
+  welcomeMailTransport,
+} from '../utils.js';
 import expressAsyncHandler from 'express-async-handler';
 import Message from '../models/messageModel.js';
+import VerificationToken from '../models/verificationTokenModel.js';
+import { isValidObjectId } from 'mongoose';
+import crypto from 'crypto';
+import dotenv from 'dotenv';
+dotenv.config();
 
 const userRouter = express.Router();
 
@@ -99,6 +116,27 @@ userRouter.post(
   '/signin',
   expressAsyncHandler(async (req, res) => {
     const user = await User.findOne({ email: req.body.email });
+    if (!user.verified) {
+      let verifyToken = await VerificationToken.findOne({ userId: user._id });
+
+      if (!verifyToken) {
+        verifyToken = await new VerificationToken({
+          userId: user._id,
+          token: crypto.randomBytes(32).toString('hex'),
+        }).save();
+
+        const url = `${process.env.BASE_URL}/${user._id}/verify/${verifyToken.token}`;
+        await mailTransport(
+          user.email,
+          'Verify Email',
+          generateEmailTemplate(url)
+        );
+      }
+      return res.status(400).send({
+        message:
+          'A verification link has been sent to your email, please confirm and try again',
+      });
+    }
     if (user) {
       if (bcrypt.compareSync(req.body.password, user.password)) {
         res.send({
@@ -106,6 +144,7 @@ userRouter.post(
           name: user.name,
           email: user.email,
           isAdmin: user.isAdmin,
+          verified: user.verified,
           token: generateToken(user),
         });
         return;
@@ -133,31 +172,170 @@ userRouter.post(
 );
 
 userRouter.post(
-  '/signup',
+  '/forgot-password',
   expressAsyncHandler(async (req, res) => {
-    var confirmedPassword;
+    try {
+      const user = await User.findOne({ email: req.body.email });
 
-    if (req.body.password == req.body.confirmPassword) {
-      confirmedPassword = bcrypt.hashSync(req.body.password);
-      console.log('password match');
-    } else {
-      console.log('passwords do not match');
+      if (!user) {
+        return res.send('User does not exist');
+      }
+
+      const verifyToken = await new VerificationToken({
+        userId: user._id,
+        token: crypto.randomBytes(32).toString('hex'),
+      }).save();
+
+      const url = `${process.env.BASE_URL}/${verifyToken.userId}/password-reset/${verifyToken.token}`;
+      console.log(url);
+      await passwordResetMail(
+        user.email,
+        'Password Reset',
+        passwordResetEmail(url)
+      );
+
+      return res.status(201).send({
+        message:
+          'A verification link has been sent to your email, please confirm and try again',
+      });
+    } catch (error) {
+      res.status(400).send({ message: 'error somewhere' });
+      console.log(error);
     }
-    const newUser = new User({
-      name: req.body.name,
-      email: req.body.email,
-
-      password: confirmedPassword,
-    });
-    const user = await newUser.save();
-    res.send({
-      _id: user._id,
-      name: user.name,
-      email: user.email,
-      isAdmin: user.isAdmin,
-      token: generateToken(user),
-    });
   })
 );
+
+userRouter.get('/:id/password-reset/:token', async (req, res) => {
+  try {
+    const user = await User.findOne({ _id: req.params.id });
+    if (!user)
+      return res.status(400).send({ message: 'Invalid Link with no user' });
+
+    const verificationToken = await VerificationToken.findOne({
+      userId: user._id,
+      token: req.params.token,
+    });
+
+    if (!verificationToken)
+      return res
+        .status(400)
+        .send({ message: 'Invalid link with no verification token' });
+
+    res.send('user verified');
+  } catch (error) {
+    res.status(500).send({ message: 'Internal Server Error' });
+    console.log(error);
+  }
+});
+
+userRouter.post('/:id/password-reset/:token', async (req, res) => {
+  try {
+    const user = await User.findById({ _id: req.params.id });
+    if (!user)
+      return res.status(400).send({ message: 'Invalid Link with no user' });
+
+    const verificationToken = await VerificationToken.findOne({
+      userId: user._id,
+      token: req.params.token,
+    });
+
+    if (!verificationToken)
+      return res
+        .status(400)
+        .send({ message: 'Invalid link with no verification token' });
+
+    await User.updateOne(
+      { _id: user._id },
+      { password: bcrypt.hashSync(req.body.password, 8) }
+    );
+
+    res.status(200).send({ message: 'password changed' });
+
+    // await verificationToken.remove();
+  } catch (error) {
+    res.status(500).send({ message: 'Internal Server Error' });
+    console.log(error);
+  }
+});
+
+userRouter.post(
+  '/signup',
+  expressAsyncHandler(async (req, res) => {
+    try {
+      const newUser = new User({
+        name: req.body.name,
+        email: req.body.email,
+        password: bcrypt.hashSync(req.body.password, 8),
+      });
+      const user = await newUser.save();
+
+      if (!user && user.verified === false)
+        return res
+          .status(400)
+          .send({ message: 'User Already exists, Sign in to continue' });
+
+      const verifyToken = await new VerificationToken({
+        userId: user._id,
+        token: crypto.randomBytes(32).toString('hex'),
+      }).save();
+
+      const url = `${process.env.BASE_URL}/${verifyToken.userId}/verify/${verifyToken.token}`;
+
+      await mailTransport(user.email, 'Verify Your - Nais Republic', url);
+
+      res.status(201).send({
+        message:
+          'A verification link has been sent to your account, please verify ',
+      });
+    } catch (error) {
+      res.status(500).send({ message: 'Internal Server Error' });
+    }
+  })
+);
+
+userRouter.get('/:id/verify/:token', async (req, res) => {
+  try {
+    const user = await User.findOne({ _id: req.params.id });
+    if (!user)
+      return res.status(400).send({ message: 'Invalid Link with no user' });
+
+    const verificationToken = await VerificationToken.findOne({
+      userId: user._id,
+      token: req.params.token,
+    });
+
+    if (!verificationToken)
+      return res
+        .status(400)
+        .send({ message: 'Invalid link with no verification token' });
+
+    await User.updateOne({ _id: user._id }, { verified: true });
+
+    if (user.verified === true) {
+      res.status(200).send({
+        _id: user._id,
+        name: user.name,
+        email: user.email,
+        isAdmin: user.isAdmin,
+        verified: user.verified,
+        token: generateToken(user),
+        message: 'Email verified successfully',
+      });
+    }
+
+    await verificationToken.remove();
+
+    const heading = `Hello ${user.name},`;
+
+    await welcomeMailTransport(
+      user.email,
+      'Email Verified Successfully at Nails Republic',
+      heading
+    );
+  } catch (error) {
+    res.status(500).send({ message: 'Internal Server Error' });
+    console.log(error);
+  }
+});
 
 export default userRouter;

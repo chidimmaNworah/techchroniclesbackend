@@ -1,5 +1,7 @@
 import jwt from 'jsonwebtoken';
 import mg from 'mailgun-js';
+import nodemailer from 'nodemailer';
+import dotenv from 'dotenv';
 
 export const generateToken = (user) => {
   return jwt.sign(
@@ -106,4 +108,217 @@ export const payOrderEmailTemplate = (order) => {
     Thanks for shopping with us.
     </p>
     `;
+};
+
+export const generateOTP = () => {
+  let otp = '';
+  for (let i = 0; i <= 3; i++) {
+    const randomValue = Math.round(Math.random() * 9);
+    otp = otp + randomValue;
+  }
+  return otp;
+};
+
+export const mailTransport = async (email, subject, url) => {
+  try {
+    const transporter = nodemailer.createTransport({
+      host: 'sandbox.smtp.mailtrap.io',
+      port: 2525,
+      // service: process.env.SERVICE,
+      // secure: Boolean(process.env.SECURE),
+      auth: {
+        user: process.env.MAILTRAP_USERNAME,
+        pass: process.env.MAILTRAP_PASSWORD,
+      },
+    });
+
+    await transporter.sendMail({
+      from: process.env.USER,
+      to: email,
+      subject: subject,
+      html: generateEmailTemplate(url),
+    });
+    console.log('email sent successfully');
+  } catch (error) {
+    console.log('email not sent');
+    console.log(error);
+  }
+};
+
+export const generateEmailTemplate = (code) => {
+  return `
+  <!DOCTYPE html>
+  <html lang="en">
+    <head>
+      <meta charset="UTF-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <style>
+        @media only screen and (max-width: 620px){
+          h1{
+            font-size: 20px;
+            padding: 5px
+          }
+        }
+      </style>
+    </head>
+    <body>
+        <div>
+          <div syle="max-width: 620px; margin: 0 auto; font-family: sans-serif; color: #272727;">
+            <h2 style="padding: 16px 0 16px 0; color: #421C8D;">
+                Nails Republic
+            </h2>
+            <p>Please Confirm your Sign up email by clicking on one of the following: </p>
+            <a href=${code} style="text-decoration: none; color: #fff;" ><button style="padding: 10px 20px 10px 20px; font-weight: 400; text-align: center; background: #421C8D; color: #fff;">Confirm</button> </a>
+            <p>or</p>
+            <a href=${code} style="text-decoration: none;" > ${code}</a>
+            <p>If you received this email by mistake, simply delete it. You won't be registered if you don't click the confirmation link above.
+</br> </br>
+            Thank you!
+            </br>
+            Kimmora</p>
+          </div>
+        </div>
+    </body>
+  </html>
+  `;
+};
+
+export const passwordResetMail = async (email, subject, url) => {
+  try {
+    const transporter = nodemailer.createTransport({
+      host: 'sandbox.smtp.mailtrap.io',
+      port: 2525,
+      // service: process.env.SERVICE,
+      // secure: Boolean(process.env.SECURE),
+      auth: {
+        user: process.env.MAILTRAP_USERNAME,
+        pass: process.env.MAILTRAP_PASSWORD,
+      },
+    });
+
+    await transporter.sendMail({
+      from: process.env.USER,
+      to: email,
+      subject: subject,
+      html: passwordResetEmail(url),
+    });
+    console.log('email sent successfully');
+  } catch (error) {
+    console.log('email not sent');
+    console.log(error);
+  }
+};
+
+export const passwordResetEmail = (code) => {
+  return `
+  <!DOCTYPE html>
+  <html lang="en">
+    <head>
+      <meta charset="UTF-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <style>
+        @media only screen and (max-width: 620px){
+          h1{
+            font-size: 20px;
+            padding: 5px
+          }
+        }
+      </style>
+    </head>
+    <body>
+        <div>
+          <div syle="max-width: 620px; margin: 0 auto; font-family: sans-serif; color: #272727;">
+            <h2 style="padding: 16px 0 16px 0; color: #421C8D;">
+                Nails Republic
+            </h2>
+            <p>Please Confirm your email by clicking on one of the following, to reset your password: </p>
+            <a href=${code} style="text-decoration: none; color: #fff;" ><button style="padding: 10px 20px 10px 20px; font-weight: 400; text-align: center; background: #421C8D; color: #fff;">Confirm</button> </a>
+            <p>or</p>
+            <a href=${code} style="text-decoration: none;" > ${code}</a>
+            <p>If you received this email by mistake, simply delete it.
+</br> </br>
+            Thank you!
+            </br>
+            Kimmora</p>
+          </div>
+        </div>
+    </body>
+  </html>
+  `;
+};
+
+export const welcomeMailTransport = async (email, subject, heading) => {
+  try {
+    const transporter = nodemailer.createTransport({
+      host: process.env.MAILTRAP_Host,
+      port: process.env.MailTrapPort,
+      Username: process.env.MAILTRAP_USERNAME,
+      Password: process.env.MAILTRAP_PASSWORD,
+      Auth: process.env.MAILTRAP_AUTH,
+      STARTTLS: process.env.MAILTRAP_STARTTLS,
+      // service: process.env.SERVICE,
+      // secure: Boolean(process.env.SECURE),
+      // auth: {
+      //   user: process.env.MAILTRAP_USERNAME,
+      //   pass: process.env.MAILTRAP_PASSWORD,
+      // },
+    });
+
+    await transporter.sendMail({
+      from: process.env.USER,
+      to: email,
+      subject: subject,
+      html: plainEmailTemplate(heading),
+    });
+    console.log('email sent successfully');
+  } catch (error) {
+    console.log('email not sent');
+    console.log(error);
+  }
+};
+
+export const plainEmailTemplate = (heading) => {
+  return `
+  <!DOCTYPE html>
+  <html lang="en">
+    <head>
+      <meta charset="UTF-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <style>
+        @media only screen and (max-width: 620px){
+          h1{
+            font-size: 20px;
+            padding: 5px
+          }
+        }
+      </style>
+    </head>
+    <body>
+        <div>
+          <div syle="max-width: 620px; margin: 0 auto; font-family: sans-serif; color: #272727;">
+            <h1 style="background: #f6f6f6; padding: 10px; text-align: center; font-family: sans-serif; color: #272727;">
+                ${heading}
+            </h1>
+            <p style="color: #272727; text-align: center;">
+            We are super excited to see you join the Nails Republic community. </br>
+            </br>
+            We hope you will be happy with products offered by the Nails Republic and that you will shop with us again and again.
+            </br>
+            </br>
+            Our goal is to offer the widest range of Nail Accessories by Nails Republic at the highest quality. If you think we should add any items to our store, do not hesitate to contact us and share your feedback.
+            </br>
+            </br>
+            Until then, enjoy your shopping!
+            </br>
+            </br>
+            Best Regards,
+            </br>
+            Nails Republic Customer Service Team
+            
+            </p>
+          </div>
+        </div>
+    </body>
+  </html>
+  `;
 };
