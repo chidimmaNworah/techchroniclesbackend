@@ -28,7 +28,7 @@ const app = express();
 
 app.use(
   cors({
-    origin: 'https://nailsrepublicclient.vercel.app/',
+    origin: 'https://www.nailsrepublic.shop/',
     credentials: true,
   })
 );
