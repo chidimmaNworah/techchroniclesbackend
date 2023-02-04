@@ -26,12 +26,12 @@ mongoose
 
 const app = express();
 
-app.use(
-  cors({
-    origin: 'https://www.nailsrepublic.shop/',
-    credentials: true,
-  })
-);
+// app.use(
+//   cors({
+//     origin: 'https://www.nailsrepublic.shop/',
+//     credentials: true,
+//   })
+// );
 
 // app.use(
 //   cors({
@@ -40,14 +40,17 @@ app.use(
 //   })
 // );
 
-// app.use((req, res, next) => {
-//   res.setHeader('Access-Control-Allow-Origin', '*');
-//   res.header(
-//     'Access-Control-Allow-Headers',
-//     'Origin, X-Requested-With, Content-Type, Accept'
-//   );
-//   next();
-// });
+app.use((req, res, next) => {
+  res.setHeader(
+    'Access-Control-Allow-Origin',
+    'https://www.nailsrepublic.shop'
+  );
+  res.header(
+    'Access-Control-Allow-Headers',
+    'Origin, X-Requested-With, Content-Type, Accept'
+  );
+  next();
+});
 
 // app.use((req, res, next) => {
 //   res.header('Access-Control-Allow-Origin', '*');
