@@ -266,9 +266,11 @@ export const welcomeMailTransport = async (email, subject, heading) => {
 
       name: 'www.nailsrepublic.shop',
       host: 'smtp.titan.email',
-      port: 587,
+      port: 465,
       secure: true,
       auth: {
+        type: 'custom',
+        method: 'MY-CUSTOM-METHOD',
         user: 'info@nailsrepublic.shop',
         pass: '64259775274',
       },
