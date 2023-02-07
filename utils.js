@@ -131,24 +131,34 @@ export const mailTransport = async (email, subject, url) => {
       //   pass: process.env.MAILTRAP_PASSWORD,
       // },
 
-      name: 'www.nailsrepublic.shop',
+      // name: 'www.nailsrepublic.shop',
       host: 'smtp.titan.email',
       port: 465,
       secure: true,
       auth: {
-        type: 'custom',
-        method: 'MY-CUSTOM-METHOD',
-        user: 'info@nailsrepublic.shop',
-        pass: '64259775274',
+        user: process.env.MAILTRAP_USERNAME,
+        pass: process.env.MAILTRAP_PASSWORD,
+      },
+      tls: {
+        rejectUnauthorized: false,
       },
     });
 
-    await transporter.sendMail({
-      from: process.env.USER,
-      to: email,
-      subject: subject,
-      html: generateEmailTemplate(url),
-    });
+    transporter.sendMail(
+      {
+        from: process.env.USER,
+        to: email,
+        subject: subject,
+        html: generateEmailTemplate(url),
+      },
+      function (error, info) {
+        if (error) {
+          console.log(error);
+        } else {
+          console.log('email sent' + info.response);
+        }
+      }
+    );
     console.log('email sent successfully');
   } catch (error) {
     console.log('email not sent');
@@ -206,15 +216,15 @@ export const passwordResetMail = async (email, subject, url) => {
       //   pass: process.env.MAILTRAP_PASSWORD,
       // },
 
-      name: 'www.nailsrepublic.shop',
       host: 'smtp.titan.email',
       port: 465,
       secure: true,
       auth: {
-        type: 'custom',
-        method: 'MY-CUSTOM-METHOD',
-        user: 'info@nailsrepublic.shop',
-        pass: '64259775274',
+        user: process.env.MAILTRAP_USERNAME,
+        pass: process.env.MAILTRAP_PASSWORD,
+      },
+      tls: {
+        rejectUnauthorized: false,
       },
     });
 
@@ -272,15 +282,15 @@ export const passwordResetEmail = (code) => {
 export const welcomeMailTransport = async (email, subject, heading) => {
   try {
     const transporter = nodemailer.createTransport({
-      name: 'www.nailsrepublic.shop',
       host: 'smtp.titan.email',
       port: 465,
       secure: true,
       auth: {
-        type: 'custom',
-        method: 'MY-CUSTOM-METHOD',
-        user: 'info@nailsrepublic.shop',
-        pass: '64259775274',
+        user: process.env.MAILTRAP_USERNAME,
+        pass: process.env.MAILTRAP_PASSWORD,
+      },
+      tls: {
+        rejectUnauthorized: false,
       },
     });
 
@@ -289,14 +299,6 @@ export const welcomeMailTransport = async (email, subject, heading) => {
       to: email,
       subject: subject,
       html: plainEmailTemplate(heading),
-    });
-
-    transporter.verify(function (error, success) {
-      if (error) {
-        console.log(error);
-      } else {
-        console.log('Server is ready to take our messages');
-      }
     });
     console.log('email sent successfully');
   } catch (error) {
