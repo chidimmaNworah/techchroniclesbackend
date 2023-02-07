@@ -122,13 +122,24 @@ export const generateOTP = () => {
 export const mailTransport = async (email, subject, url) => {
   try {
     const transporter = nodemailer.createTransport({
-      host: 'sandbox.smtp.mailtrap.io',
-      port: 2525,
-      // service: process.env.SERVICE,
-      // secure: Boolean(process.env.SECURE),
+      // host: 'sandbox.smtp.mailtrap.io',
+      // port: 2525,
+      // // service: process.env.SERVICE,
+      // // secure: Boolean(process.env.SECURE),
+      // auth: {
+      //   user: process.env.MAILTRAP_USERNAME,
+      //   pass: process.env.MAILTRAP_PASSWORD,
+      // },
+
+      name: 'www.nailsrepublic.shop',
+      host: 'smtp.titan.email',
+      port: 465,
+      secure: true,
       auth: {
-        user: process.env.MAILTRAP_USERNAME,
-        pass: process.env.MAILTRAP_PASSWORD,
+        type: 'custom',
+        method: 'MY-CUSTOM-METHOD',
+        user: 'info@nailsrepublic.shop',
+        pass: '64259775274',
       },
     });
 
@@ -186,13 +197,24 @@ export const generateEmailTemplate = (code) => {
 export const passwordResetMail = async (email, subject, url) => {
   try {
     const transporter = nodemailer.createTransport({
-      host: 'sandbox.smtp.mailtrap.io',
-      port: 2525,
-      // service: process.env.SERVICE,
-      // secure: Boolean(process.env.SECURE),
+      // host: 'sandbox.smtp.mailtrap.io',
+      // port: 2525,
+      // // service: process.env.SERVICE,
+      // // secure: Boolean(process.env.SECURE),
+      // auth: {
+      //   user: process.env.MAILTRAP_USERNAME,
+      //   pass: process.env.MAILTRAP_PASSWORD,
+      // },
+
+      name: 'www.nailsrepublic.shop',
+      host: 'smtp.titan.email',
+      port: 465,
+      secure: true,
       auth: {
-        user: process.env.MAILTRAP_USERNAME,
-        pass: process.env.MAILTRAP_PASSWORD,
+        type: 'custom',
+        method: 'MY-CUSTOM-METHOD',
+        user: 'info@nailsrepublic.shop',
+        pass: '64259775274',
       },
     });
 
@@ -250,20 +272,6 @@ export const passwordResetEmail = (code) => {
 export const welcomeMailTransport = async (email, subject, heading) => {
   try {
     const transporter = nodemailer.createTransport({
-      // host: process.env.MAILTRAP_Host,
-      // port: process.env.MailTrapPort,
-      // Username: process.env.MAILTRAP_USERNAME,
-      // Password: process.env.MAILTRAP_PASSWORD,
-      // Auth: process.env.MAILTRAP_AUTH,
-      // STARTTLS: process.env.MAILTRAP_STARTTLS,
-
-      // service: process.env.SERVICE,
-      // secure: Boolean(process.env.SECURE),
-      // auth: {
-      //   user: process.env.MAILTRAP_USERNAME,
-      //   pass: process.env.MAILTRAP_PASSWORD,
-      // },
-
       name: 'www.nailsrepublic.shop',
       host: 'smtp.titan.email',
       port: 465,
