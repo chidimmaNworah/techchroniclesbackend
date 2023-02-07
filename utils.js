@@ -272,9 +272,6 @@ export const welcomeMailTransport = async (email, subject, heading) => {
         user: 'info@nailsrepublic.shop',
         pass: '64259775274',
       },
-      tls: {
-        rejectUnauthorized: false,
-      },
     });
 
     await transporter.sendMail({
@@ -282,6 +279,14 @@ export const welcomeMailTransport = async (email, subject, heading) => {
       to: email,
       subject: subject,
       html: plainEmailTemplate(heading),
+    });
+
+    transporter.verify(function (error, success) {
+      if (error) {
+        console.log(error);
+      } else {
+        console.log('Server is ready to take our messages');
+      }
     });
     console.log('email sent successfully');
   } catch (error) {
