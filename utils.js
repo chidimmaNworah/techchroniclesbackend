@@ -122,25 +122,12 @@ export const generateOTP = () => {
 export const mailTransport = async (email, subject, url) => {
   try {
     const transporter = nodemailer.createTransport({
-      // host: 'sandbox.smtp.mailtrap.io',
-      // port: 2525,
-      // // service: process.env.SERVICE,
-      // // secure: Boolean(process.env.SECURE),
-      // auth: {
-      //   user: process.env.MAILTRAP_USERNAME,
-      //   pass: process.env.MAILTRAP_PASSWORD,
-      // },
-
-      // name: 'www.nailsrepublic.shop',
       host: 'smtp.titan.email',
       port: 465,
       secure: true,
       auth: {
         user: process.env.MAILTRAP_USERNAME,
         pass: process.env.MAILTRAP_PASSWORD,
-      },
-      tls: {
-        rejectUnauthorized: false,
       },
     });
 
@@ -183,20 +170,56 @@ export const generateEmailTemplate = (code) => {
       </style>
     </head>
     <body>
-        <div>
-          <div syle="max-width: 620px; margin: 0 auto; font-family: sans-serif; color: #272727;">
-            <h2 style="padding: 16px 0 16px 0; color: #421C8D;">
-                Nails Republic
-            </h2>
-            <p>Please Confirm your Sign up email by clicking on one of the following: </p>
-            <a href=${code} style="text-decoration: none; color: #fff;" ><button style="padding: 10px 20px 10px 20px; font-weight: 400; text-align: center; background: #421C8D; color: #fff;">Confirm</button> </a>
-            <p>or</p>
-            <a href=${code} style="text-decoration: none;" > ${code}</a>
-            <p>If you received this email by mistake, simply delete it. You won't be registered if you don't click the confirmation link above.
-</br> </br>
-            Thank you!
-            </br>
-            Kimmora</p>
+        <div style="position: relative;">
+          <div syle="position: absolute; top: 50%; left: 50%; max-width: 420px; margin: 0 auto; font-family: sans-serif; color: #272727; text-align: center;">
+            <p style="text-align: center; padding: 16px 0 16px 0; background: #421C8D; margin-bottom: 20px;">
+              <img src='https://res.cloudinary.com/kimmoramicky/image/upload/v1675863431/nailsrepublic/web_logo_name_umaqtm.png' alt='nails republic' width='120px' />
+            </p>
+            <p style="text-align: center; background: #fff; margin-bottom: 20px;">
+              <img src='https://res.cloudinary.com/kimmoramicky/image/upload/v1675868483/nailsrepublic/web_pic_name-removebg-preview_k3w2hj.png' alt='nails republic' width='300px' />
+            </p>
+          <h2 style="color: #421C8D; text-align: center;">
+            Thank you for registering!
+          </h2>
+            <p style="text-align: center;">
+              Please Confirm your Sign up email by clicking on one of the following: 
+            </p>
+            <p style="text-align: center; margin-bottom: 20px;">
+              <a href=${code} style="text-decoration: none; color: #fff;" >
+                <button style="padding: 10px 20px 10px 20px; font-weight: 400; text-align: center; background: #421C8D; color: #fff;">
+                  Confirm
+                </button>
+              </a>
+            </p
+              <div style="margin-bottom: 20px;">
+            <p style="text-align: center;">or copy the code below and paste this code in your web browser</p>
+            <a href=${code} style="text-decoration: none; text-align: center;" > ${code}</a>
+            </div>
+            <p style="text-align: center; margin-botton: 40px;">
+              If you received this email by mistake, simply delete it. You won't be registered if you don't click the confirmation link above.
+            </p>
+            <p style="text-align: center;">
+              Thank you!
+            </p>
+            <p style="text-align: center;">
+              Kimmora
+            </p>
+            <hr />
+            <p style="text-align: center; margin-botton: 20px;">
+            +234 9070361277
+            </p>
+            <p style="text-align: center;">
+            info@nailsrepublic.shop
+            </p>
+            <p style="text-align: center;">
+              www.nailsrepublic.shop
+            </p>
+            <p style="text-align: center;">
+              If you face any issue with shopping on our website, please reach out to us along with the complete screenshot of the issue.
+            </p>
+            <p style="text-align: center;">
+              Write to us for additional assistance.
+            </p>
           </div>
         </div>
     </body>
@@ -207,24 +230,12 @@ export const generateEmailTemplate = (code) => {
 export const passwordResetMail = async (email, subject, url) => {
   try {
     const transporter = nodemailer.createTransport({
-      // host: 'sandbox.smtp.mailtrap.io',
-      // port: 2525,
-      // // service: process.env.SERVICE,
-      // // secure: Boolean(process.env.SECURE),
-      // auth: {
-      //   user: process.env.MAILTRAP_USERNAME,
-      //   pass: process.env.MAILTRAP_PASSWORD,
-      // },
-
       host: 'smtp.titan.email',
       port: 465,
-      secure: true,
+      secure: false,
       auth: {
         user: process.env.MAILTRAP_USERNAME,
         pass: process.env.MAILTRAP_PASSWORD,
-      },
-      tls: {
-        rejectUnauthorized: false,
       },
     });
 
@@ -260,18 +271,47 @@ export const passwordResetEmail = (code) => {
     <body>
         <div>
           <div syle="max-width: 620px; margin: 0 auto; font-family: sans-serif; color: #272727;">
-            <h2 style="padding: 16px 0 16px 0; color: #421C8D;">
-                Nails Republic
-            </h2>
-            <p>Please Confirm your email by clicking on one of the following, to reset your password: </p>
-            <a href=${code} style="text-decoration: none; color: #fff;" ><button style="padding: 10px 20px 10px 20px; font-weight: 400; text-align: center; background: #421C8D; color: #fff;">Confirm</button> </a>
-            <p>or</p>
+          <p style="text-align: center; padding: 16px 0 16px 0; background: #421C8D; margin-bottom: 20px;">
+          <img src='https://res.cloudinary.com/kimmoramicky/image/upload/v1675863431/nailsrepublic/web_logo_name_umaqtm.png' alt='nails republic' width='120px' />
+        </p>
+            <p style="text-align: center;">Please Confirm your email by clicking on one of the following, to reset your password: </p>
+            <p style="text-align: center;">
+            <a href=${code} style="text-decoration: none; color: #fff;" >
+              <button style="padding: 10px 20px 10px 20px; font-weight: 400; text-align: center; background: #421C8D; color: #fff;">
+                Confirm
+              </button>
+            </a>
+            </p>
+            <p style="text-align: center;">or</p>
+            <p style="text-align: center;">
             <a href=${code} style="text-decoration: none;" > ${code}</a>
-            <p>If you received this email by mistake, simply delete it.
-</br> </br>
-            Thank you!
-            </br>
-            Kimmora</p>
+            </p>
+            <p style="text-align: center; margin-botton: 40px;">
+              If you received this email by mistake, simply delete it. You won't be registered if you don't click the confirmation link above.
+            </p>
+            <p style="text-align: center;">
+              Thank you!
+            </p>
+            <p style="text-align: center;">
+              Kimmora
+            </p>
+            <hr />
+            <p style="text-align: center; margin-botton: 20px;">
+            +234 9070361277
+            </p>
+            <p style="text-align: center;">
+            info@nailsrepublic.shop
+            </p>
+            <p style="text-align: center;">
+              www.nailsrepublic.shop
+            </p>
+            <p style="text-align: center;">
+              If you face any issue with shopping on our website, please reach out to us along with the complete screenshot of the issue.
+            </p>
+            <p style="text-align: center;">
+              Write to us for additional assistance.
+            </p>
+            </p>
           </div>
         </div>
     </body>
@@ -288,9 +328,6 @@ export const welcomeMailTransport = async (email, subject, heading) => {
       auth: {
         user: process.env.MAILTRAP_USERNAME,
         pass: process.env.MAILTRAP_PASSWORD,
-      },
-      tls: {
-        rejectUnauthorized: false,
       },
     });
 
@@ -326,6 +363,9 @@ export const plainEmailTemplate = (heading) => {
     <body>
         <div>
           <div syle="max-width: 620px; margin: 0 auto; font-family: sans-serif; color: #272727;">
+          <p style="text-align: center; padding: 16px 0 16px 0; background: #421C8D; margin-bottom: 20px;">
+              <img src='https://res.cloudinary.com/kimmoramicky/image/upload/v1675863431/nailsrepublic/web_logo_name_umaqtm.png' alt='nails republic' width='120px' />
+            </p>
             <h1 style="background: #f6f6f6; padding: 10px; text-align: center; font-family: sans-serif; color: #272727;">
                 ${heading}
             </h1>
@@ -344,7 +384,22 @@ export const plainEmailTemplate = (heading) => {
             Best Regards,
             </br>
             Nails Republic Customer Service Team
-            
+            <hr />
+            <p style="text-align: center; margin-botton: 20px;">
+            +234 9070361277
+            </p>
+            <p style="text-align: center;>
+            info@nailsrepublic.shop
+            </p>
+            <p style="text-align: center;>
+              www.nailsrepublic.shop
+            </p>
+            <p style="text-align: center;>
+              If you face any issue with shopping on our website, please reach out to us along with the complete screenshot of the issue.
+            </p>
+            <p style="text-align: center;>
+              Write to us for additional assistance.
+            </p>
             </p>
           </div>
         </div>
