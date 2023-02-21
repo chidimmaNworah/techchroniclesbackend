@@ -2,6 +2,7 @@ import jwt from 'jsonwebtoken';
 import mg from 'mailgun-js';
 import nodemailer from 'nodemailer';
 import dotenv from 'dotenv';
+dotenv.config();
 
 export const generateToken = (user) => {
   return jwt.sign(
@@ -45,9 +46,9 @@ export const isAdmin = (req, res, next) => {
 
 export const mailgun = () =>
   nodemailer.createTransport({
-    host: 'smtp.titan.email',
-    port: 465,
-    secure: true,
+    host: process.env.MAILTRAP_HOST,
+    port: process.env.MAILTRAP_PORT,
+    secure: process.env.MAILTRAP_SECURE,
     auth: {
       user: process.env.MAILTRAP_USERNAME,
       pass: process.env.MAILTRAP_PASSWORD,
@@ -127,9 +128,9 @@ export const generateOTP = () => {
 export const mailTransport = async (email, subject, url) => {
   try {
     const transporter = nodemailer.createTransport({
-      host: 'smtp.titan.email',
-      port: 465,
-      secure: true,
+      host: process.env.MAILTRAP_HOST,
+      port: process.env.MAILTRAP_PORT,
+      secure: process.env.MAILTRAP_SECURE,
       auth: {
         user: process.env.MAILTRAP_USERNAME,
         pass: process.env.MAILTRAP_PASSWORD,
@@ -235,9 +236,9 @@ export const generateEmailTemplate = (code) => {
 export const passwordResetMail = async (email, subject, url) => {
   try {
     const transporter = nodemailer.createTransport({
-      host: 'smtp.titan.email',
-      port: 465,
-      secure: false,
+      host: process.env.MAILTRAP_HOST,
+      port: process.env.MAILTRAP_PORT,
+      secure: process.env.MAILTRAP_SECURE,
       auth: {
         user: process.env.MAILTRAP_USERNAME,
         pass: process.env.MAILTRAP_PASSWORD,
@@ -327,9 +328,9 @@ export const passwordResetEmail = (code) => {
 export const welcomeMailTransport = async (email, subject, heading) => {
   try {
     const transporter = nodemailer.createTransport({
-      host: 'smtp.titan.email',
-      port: 465,
-      secure: true,
+      host: process.env.MAILTRAP_HOST,
+      port: process.env.MAILTRAP_PORT,
+      secure: process.env.MAILTRAP_SECURE,
       auth: {
         user: process.env.MAILTRAP_USERNAME,
         pass: process.env.MAILTRAP_PASSWORD,

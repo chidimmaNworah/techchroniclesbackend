@@ -25,6 +25,11 @@ const productSchema = new mongoose.Schema(
     rating: { type: Number, required: true },
     numReviews: { type: Number, required: true },
     reviews: [reviewSchema],
+    combo: { type: Boolean, default: false },
+    nailart: { type: Boolean, default: false },
+    tools: { type: Boolean, default: false },
+    treatment: { type: Boolean, default: false },
+    discount: { type: Boolean, default: false },
   },
   {
     timestamps: true,

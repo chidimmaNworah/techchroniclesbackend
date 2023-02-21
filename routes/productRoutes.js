@@ -12,18 +12,34 @@ productRouter.get('/', async (req, res) => {
   res.send(products);
 });
 
-// productRouter.get('/top-products', async (req, res) => {
-//   const products = await Product.find();
-//   res.send(products);
-// });
+productRouter.get('/combo', async (req, res) => {
+  const products = await Product.find({ combo: true }).sort({ createdAt: 1 });
+  res.send(products);
+});
 
-// productRouter.get(
-//   '/top-products',
-//   expressAsyncHandler(async (req, res) => {
-//     const topProducts = await Product.find().sort({ rating: -1 }).limit(3);
-//     res.send(topProducts);
-//   })
-// );
+productRouter.get('/nailart', async (req, res) => {
+  const products = await Product.find({ nailart: true }).sort({ createdAt: 1 });
+  res.send(products);
+});
+
+productRouter.get('/tools', async (req, res) => {
+  const products = await Product.find({ tools: true }).sort({ createdAt: 1 });
+  res.send(products);
+});
+
+productRouter.get('/treatment', async (req, res) => {
+  const products = await Product.find({ treatment: true }).sort({
+    createdAt: 1,
+  });
+  res.send(products);
+});
+
+productRouter.get('/discount', async (req, res) => {
+  const products = await Product.find({ discount: true }).sort({
+    createdAt: 1,
+  });
+  res.send(products);
+});
 
 productRouter.post(
   '/',
@@ -64,6 +80,10 @@ productRouter.put(
       product.brand = req.body.brand;
       product.countInStock = req.body.countInStock;
       product.description = req.body.description;
+      product.tools = req.body.tools;
+      product.discount = req.body.discount;
+      product.nailart = req.body.nailart;
+      product.combo = req.body.combo;
       await product.save();
       res.send({ message: 'Product Updated' });
     } else {
@@ -131,6 +151,96 @@ productRouter.get('/changepage', async (req, res) => {
   const pageSize = query.pageSize || PAGE_SIZE;
 
   const products = await Product.find()
+    .sort({ createdAt: 1 })
+    .skip(pageSize * (page - 1))
+    .limit(pageSize);
+  const countProducts = await Product.countDocuments();
+  res.send({
+    products,
+    countProducts,
+    page,
+    pages: Math.ceil(countProducts / pageSize),
+  });
+});
+
+productRouter.get('/combo/changepage', async (req, res) => {
+  const { query } = req;
+  const page = query.page || 1;
+  const pageSize = query.pageSize || PAGE_SIZE;
+
+  const products = await Product.find({ combo: true })
+    .sort({ createdAt: 1 })
+    .skip(pageSize * (page - 1))
+    .limit(pageSize);
+  const countProducts = await Product.countDocuments();
+  res.send({
+    products,
+    countProducts,
+    page,
+    pages: Math.ceil(countProducts / pageSize),
+  });
+});
+
+productRouter.get('/tools/changepage', async (req, res) => {
+  const { query } = req;
+  const page = query.page || 1;
+  const pageSize = query.pageSize || PAGE_SIZE;
+
+  const products = await Product.find({ tools: true })
+    .sort({ createdAt: 1 })
+    .skip(pageSize * (page - 1))
+    .limit(pageSize);
+  const countProducts = await Product.countDocuments();
+  res.send({
+    products,
+    countProducts,
+    page,
+    pages: Math.ceil(countProducts / pageSize),
+  });
+});
+
+productRouter.get('/discount/changepage', async (req, res) => {
+  const { query } = req;
+  const page = query.page || 1;
+  const pageSize = query.pageSize || PAGE_SIZE;
+
+  const products = await Product.find({ discount: true })
+    .sort({ createdAt: 1 })
+    .skip(pageSize * (page - 1))
+    .limit(pageSize);
+  const countProducts = await Product.countDocuments();
+  res.send({
+    products,
+    countProducts,
+    page,
+    pages: Math.ceil(countProducts / pageSize),
+  });
+});
+
+productRouter.get('/nailart/changepage', async (req, res) => {
+  const { query } = req;
+  const page = query.page || 1;
+  const pageSize = query.pageSize || PAGE_SIZE;
+
+  const products = await Product.find({ nailart: true })
+    .sort({ createdAt: 1 })
+    .skip(pageSize * (page - 1))
+    .limit(pageSize);
+  const countProducts = await Product.countDocuments();
+  res.send({
+    products,
+    countProducts,
+    page,
+    pages: Math.ceil(countProducts / pageSize),
+  });
+});
+
+productRouter.get('/treatment/changepage', async (req, res) => {
+  const { query } = req;
+  const page = query.page || 1;
+  const pageSize = query.pageSize || PAGE_SIZE;
+
+  const products = await Product.find({ treatment: true })
     .sort({ createdAt: 1 })
     .skip(pageSize * (page - 1))
     .limit(pageSize);
