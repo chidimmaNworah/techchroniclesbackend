@@ -22,12 +22,12 @@ mongoose
 
 const app = express();
 
-// app.use(
-//   cors({
-//     origin: 'https://www.nailsrepublic.shop/',
-//     credentials: true,
-//   })
-// );
+app.use(
+  cors({
+    origin: 'https://github.com/chidimmaNworah/techchronicles.git',
+    credentials: true,
+  })
+);
 
 // app.use(
 //   cors({
