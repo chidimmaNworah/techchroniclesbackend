@@ -24,7 +24,7 @@ const app = express();
 
 app.use(
   cors({
-    origin: 'https://techchronicles.vercel.app/',
+    origin: 'https://techchronicles.vercel.app',
     credentials: true,
   })
 );
