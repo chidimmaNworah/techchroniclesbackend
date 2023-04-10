@@ -2,7 +2,7 @@ import dotenv from 'dotenv';
 import express from 'express';
 import path from 'path';
 import mongoose from 'mongoose';
-import productRouter from './routes/productRoutes.js';
+import blogRouter from './routes/blogRoutes.js';
 import userRouter from './routes/userRoutes.js';
 import orderRouter from './routes/orderRoutes.js';
 import uploadRouter from './routes/uploadRoutes.js';
@@ -29,12 +29,12 @@ const app = express();
 //   })
 // );
 
-app.use(
-  cors({
-    origin: 'https://www.nailsrepublic.shop',
-    credentials: true,
-  })
-);
+// app.use(
+//   cors({
+//     origin: 'http://localhost:',
+//     credentials: true,
+//   })
+// );
 
 // app.use((req, res, next) => {
 //   res.setHeader(
@@ -78,7 +78,7 @@ app.get('/api/keys/google', (req, res) => {
   res.send({ key: process.env.GOOGLE_API_KEY || '' });
 });
 app.use('/api/upload', uploadRouter);
-app.use('/api/products', productRouter);
+app.use('/api/blogs', blogRouter);
 app.use('/api/users', userRouter);
 app.use('/api/orders', orderRouter);
 
