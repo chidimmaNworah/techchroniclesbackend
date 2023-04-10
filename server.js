@@ -24,7 +24,7 @@ const app = express();
 
 app.use(
   cors({
-    origin: 'https://github.com/chidimmaNworah/techchronicles.git',
+    origin: 'https://techchronicles.vercel.app/',
     credentials: true,
   })
 );
