@@ -4,14 +4,12 @@ import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
 import {
   generateEmailTemplate,
-  generateOTP,
   generateToken,
   isAdmin,
   isAuth,
   mailTransport,
   passwordResetEmail,
   passwordResetMail,
-  plainEmailTemplate,
   welcomeMailTransport,
 } from '../utils.js';
 import expressAsyncHandler from 'express-async-handler';
@@ -128,7 +126,7 @@ userRouter.post(
         const url = `${process.env.BASE_URL}/${user._id}/verify/${verifyToken.token}`;
         await mailTransport(
           user.email,
-          'Verify Email',
+          'Verify Your Email',
           generateEmailTemplate(url)
         );
       }
@@ -281,7 +279,7 @@ userRouter.post(
 
       const url = `${process.env.BASE_URL}/${verifyToken.userId}/verify/${verifyToken.token}`;
 
-      await mailTransport(user.email, 'Verify Your - Nais Republic', url);
+      await mailTransport(user.email, 'Verify Your Email', url);
 
       res.status(201).send({
         message:
@@ -324,14 +322,6 @@ userRouter.get('/:id/verify/:token', async (req, res) => {
     }
 
     await verificationToken.remove();
-
-    const heading = `Hello ${user.name},`;
-
-    await welcomeMailTransport(
-      user.email,
-      'Email Verified Successfully at Nails Republic',
-      heading
-    );
   } catch (error) {
     res.status(500).send({ message: 'Internal Server Error' });
     console.log(error);
