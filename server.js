@@ -24,7 +24,7 @@ const app = express();
 
 app.use(
   cors({
-    origin: 'https://www.kimmotech.blog',
+    origin: 'https://kimmotech.blog',
     credentials: true,
   })
 );
