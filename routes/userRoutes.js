@@ -10,7 +10,6 @@ import {
   mailTransport,
   passwordResetEmail,
   passwordResetMail,
-  welcomeMailTransport,
 } from '../utils.js';
 import expressAsyncHandler from 'express-async-handler';
 import Message from '../models/messageModel.js';
