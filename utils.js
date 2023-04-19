@@ -69,7 +69,7 @@ export const mailTransport = async (email, subject, url) => {
 
     transporter.sendMail(
       {
-        from: process.env.USER,
+        from: `Kimmotechnology <mail@kimmotechnology.com>`,
         to: email,
         subject: subject,
         html: generateEmailTemplate(url),
@@ -105,10 +105,10 @@ export const generateEmailTemplate = (code) => {
               <img src='https://res.cloudinary.com/kimmoramicky/image/upload/v1681830645/techchronicles/kimmotech_new_logo-01-01_jqjnnb.png' alt='Kimmotech' width='120px' />
             </p>
 
-          <h1 style="color: #fff; text-align: center; font-weight: 700; font-size: 2.5rem;">
+          <h1 style="text-align: center; font-weight: 700; font-size: 2.5rem;">
             Verify your email address
           </h1>
-            <p style="text-align: center; font-size: 1.5rem; color: #fff; margin-bottom: 1rem;">
+            <p style="text-align: center; font-size: 1.5rem; margin-bottom: 1rem;">
             This email address was recently used to log into a Kimmotechnology Website. 
             If this was you, please verify your email address by clicking the following link:
             </p>
@@ -117,11 +117,11 @@ export const generateEmailTemplate = (code) => {
                 Confirm my account
               </a>
             </p>
-            <p style="text-align: center; font-size: 1.5rem; color: #fff;">
+            <p style="text-align: center; font-size: 1.5rem;">
             If this was not you, you can safely delete this email
             </p>
             <hr/>
-            <p style="text-align: center; font-size: 1rem; color: #fff;">
+            <p style="text-align: center; font-size: 1rem;">
             If you are having any issues with your account, please contact the company through the contact details on the website
             </p>            
           </div>
@@ -144,7 +144,7 @@ export const passwordResetMail = async (email, subject, url) => {
     });
 
     await transporter.sendMail({
-      from: process.env.USER,
+      from: `Kimmotechnology <mail@kimmotechnology.com>`,
       to: email,
       subject: subject,
       html: passwordResetEmail(url),
@@ -172,10 +172,10 @@ export const passwordResetEmail = (code) => {
               <img src='https://res.cloudinary.com/kimmoramicky/image/upload/v1681830645/techchronicles/kimmotech_new_logo-01-01_jqjnnb.png' alt='Kimmotech' width='120px' />
             </p>
 
-          <h1 style="color: #fff; text-align: center; font-weight: 700; font-size: 2.5rem;">
+          <h1 style="text-align: center; font-weight: 700; font-size: 2.5rem;">
             Reset your password
           </h1>
-            <p style="text-align: center; font-size: 1.5rem; color: #fff; margin-bottom: 1rem;">
+            <p style="text-align: center; font-size: 1.5rem; margin-bottom: 1rem;">
             This email address was recently used to request for a password reset. 
             If this was you, please verify your email address by clicking the following link:
             </p>
@@ -184,11 +184,11 @@ export const passwordResetEmail = (code) => {
                 Reset my password
               </a>
             </p>
-            <p style="text-align: center; font-size: 1.5rem; color: #fff;">
+            <p style="text-align: center; font-size: 1.5rem;>
             If this was not you, you can safely delete this email
             </p>
             <hr/>
-            <p style="text-align: center; font-size: 1rem; color: #fff;">
+            <p style="text-align: center; font-size: 1rem;>
             If you are having any issues with your account, please contact the company through the contact details on the website
             </p>            
           </div>
