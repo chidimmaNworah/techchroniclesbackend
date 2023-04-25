@@ -108,7 +108,7 @@ blogRouter.get('/changepage', async (req, res) => {
   const page = query.page || 1;
   const pageSize = query.pageSize || PAGE_SIZE;
 
-  const products = await Product.find()
+  const products = await Blog.find()
     .sort({ createdAt: 1 })
     .skip(pageSize * (page - 1))
     .limit(pageSize);
@@ -131,6 +131,7 @@ blogRouter.get(
     const pageSize = query.pageSize || PAGE_SIZE;
 
     const products = await Blog.find()
+      .sort({ createdAt: -1 })
       .skip(pageSize * (page - 1))
       .limit(pageSize);
     const countProducts = await Blog.countDocuments();
