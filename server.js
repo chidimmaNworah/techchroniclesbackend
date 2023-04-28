@@ -22,19 +22,19 @@ mongoose
 
 const app = express();
 
-app.use(
-  cors({
-    origin: 'https://www.kimmotech.blog',
-    credentials: true,
-  })
-);
-
 // app.use(
 //   cors({
-//     origin: 'http://localhost:3000',
+//     origin: 'https://www.kimmotech.blog',
 //     credentials: true,
 //   })
 // );
+
+app.use(
+  cors({
+    origin: 'http://localhost:3000',
+    credentials: true,
+  })
+);
 
 const stripe = new Stripe(process.env.SECRET_KEY);
 

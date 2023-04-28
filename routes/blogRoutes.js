@@ -4,6 +4,7 @@ import expressAsyncHandler from 'express-async-handler';
 import { isAuth, isAdmin } from '../utils.js';
 
 import Blog from '../models/blogModel.js';
+import User from '../models/userModel.js';
 
 const blogRouter = express.Router();
 
@@ -26,6 +27,7 @@ blogRouter.post(
       rating: 0,
       numReviews: 0,
       post: 'sample post',
+      user: req.user._id,
     });
     const blog = await newBlog.save();
     res.send({ message: 'Blog Created', blog });
@@ -235,7 +237,7 @@ blogRouter.get('/slug/:slug', async (req, res) => {
     { slug: req.params.slug },
     { $inc: { views: 1 } },
     { new: true }
-  );
+  ).populate('user', ['name', 'images', 'bio']);
   if (blog) {
     res.send(blog);
   } else {

@@ -23,6 +23,7 @@ const blogpostSchema = new mongoose.Schema(
     numReviews: { type: Number, required: true },
     views: { type: Number },
     reviews: [reviewSchema],
+    user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
   },
   {
     timestamps: true,

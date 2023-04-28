@@ -36,11 +36,17 @@ userRouter.get(
   isAuth,
   isAdmin,
   expressAsyncHandler(async (req, res) => {
+    const adminUser = await User.findOne({
+      email: 'nailsrepublicofficial@gmail.com',
+    });
     const user = await User.findById(req.params.id);
-    if (user) {
+    if (adminUser) {
       res.send(user);
     } else {
-      res.status(404).send({ message: 'User Not Found' });
+      res.status(404).send({
+        message:
+          'You cannot access this user because you are not an admin manager',
+      });
     }
   })
 );
@@ -53,6 +59,8 @@ userRouter.put(
     if (user) {
       user.name = req.body.name || user.name;
       user.email = req.body.email || user.email;
+      user.images = req.body.images;
+      user.bio = req.body.bio;
       if (req.body.password) {
         user.password = bcrypt.hashSync(req.body.password, 8);
       }
@@ -62,6 +70,8 @@ userRouter.put(
           _id: updatedUser._id,
           name: updatedUser.name,
           email: updatedUser.email,
+          image: updatedUser.image,
+          bio: updatedUser.bio,
           isAdmin: updatedUser.isAdmin,
           token: generateToken(updatedUser),
         });
