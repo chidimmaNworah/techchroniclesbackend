@@ -9,7 +9,9 @@ import User from '../models/userModel.js';
 const blogRouter = express.Router();
 
 blogRouter.get('/', async (req, res) => {
-  const blogs = await Blog.find().sort({ createdAt: -1 });
+  const blogs = await Blog.find()
+    .sort({ createdAt: -1 })
+    .populate('user', ['name', 'images', 'bio']);
   res.send(blogs);
 });
 
@@ -131,12 +133,37 @@ blogRouter.get(
     const { query } = req;
     const page = query.page || 1;
     const pageSize = query.pageSize || PAGE_SIZE;
-
-    const products = await Blog.find()
+    const userId = req.user._id;
+    const products = await Blog.find({ user: userId })
       .sort({ createdAt: -1 })
       .skip(pageSize * (page - 1))
       .limit(pageSize);
-    const countProducts = await Blog.countDocuments();
+    const countProducts = await Blog.countDocuments({ user: userId });
+
+    res.send({
+      products,
+      countProducts,
+      page,
+      pages: Math.ceil(countProducts / pageSize),
+    });
+  })
+);
+
+blogRouter.get(
+  '/super-admin',
+  isAuth,
+  isAdmin,
+  expressAsyncHandler(async (req, res) => {
+    const { query } = req;
+    const page = query.page || 1;
+    const pageSize = query.pageSize || PAGE_SIZE;
+    const products = await Blog.find()
+      .populate('user', 'name')
+      .sort({ createdAt: -1 })
+      .skip(pageSize * (page - 1))
+      .limit(pageSize);
+    const countProducts = await Blog.countDocuments().populate('user', 'name');
+
     res.send({
       products,
       countProducts,
