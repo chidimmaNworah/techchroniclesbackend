@@ -23,7 +23,7 @@ blogRouter.post(
     const newBlog = new Blog({
       name: 'sample name ' + Date.now(),
       slug: 'sample-name-' + Date.now(),
-      image: '/images/2.png',
+      image: 'clearThisImage.png',
       category: 'sample category',
       smallPost: 'sample small post',
       rating: 0,
